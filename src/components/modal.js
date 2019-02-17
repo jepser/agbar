@@ -8,12 +8,12 @@ const Root = styled.div`
   width: 100%;
   height: 100%;
   padding: 20px;
-  background-color: #ccc;
+  color: ${props => (props.color ? "white" : "#111")};
+  background-color: ${props => props.color || "#f1f1"};
 `
 
 const Close = styled.button`
-  // border: 0;
-  // background: transparent;
+  marginb-bottom: 20px;
 `
 
 const CloseWrap = styled.div`
@@ -21,13 +21,13 @@ const CloseWrap = styled.div`
   justify-content: flex-end;
 `
 
-const Modal = ({ onClose }) => {
+const Modal = ({ color, onClose }) => {
   return (
-    <Root>
+    <Root color={color}>
       <CloseWrap>
         <Close onClick={onClose}>Close</Close>
       </CloseWrap>
-      <h2>🤔 Why do we do this?</h2>
+      <h2>🤔 Why did we do this?</h2>
       <p>
         5 people thought that "hacking" the Agbar tower (Olivia, Paola, Pilar,
         Tiago & Jepser), might be really cool.

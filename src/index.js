@@ -2,7 +2,13 @@ import React from "react"
 import ReactDOM from "react-dom"
 import EmotionCard from "./components/emotion-card"
 import Modal from "./components/modal"
-import styled from "styled-components"
+import {
+  Title,
+  ButtonWrap,
+  Paragraph,
+  Link,
+  Voted
+} from "./components/styled-components"
 import "./styles.css"
 
 const EMOTIONS = {
@@ -25,28 +31,6 @@ const EMOTIONS = {
 
 const AGBAR_ENDPOINT =
   "https://us-central1-hackup-light.cloudfunctions.net/changeTorreGloriasImage"
-
-const Title = styled.h1`
-  margin-bottom: 20px;
-  font-size: 48px;
-`
-
-const ButtonWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  opacity: ${props => (props.voted ? 0.5 : 1)};
-`
-
-const Paragraph = styled.p`
-  max-width: 320px;
-  margin-bottom: 32px;
-  line-height: 1.5;
-`
-
-const Link = styled.a`
-  text-decoration: underline;
-`
 
 const getVotes = () => {
   return (
@@ -107,15 +91,29 @@ class App extends React.Component {
     })
   }
 
-  handleSelectEmotion = e => {
+  handleVotes = e => {
     e.preventDefault()
+
+    if (this.state.voted) return false
 
     const votedEmotion = e.target.value
 
-    this.setState({
-      voted: votedEmotion
+    this.setState(state => {
+      const newFeelings = state.feelings.map(feel => ({
+        ...feel,
+        votes: votedEmotion === feel.key ? feel.votes + 1 : feel.votes
+      }))
+      return {
+        voted: votedEmotion,
+        feelings: newFeelings
+      }
     })
-    console.log(votedEmotion)
+
+    setTimeout(() => {
+      this.setState({
+        voted: ""
+      })
+    }, 20000)
     // fetch(`${AGBAR_ENDPOINT}?image=${image}`).then(r => {
     //   console.log(r)
     // })
@@ -123,6 +121,7 @@ class App extends React.Component {
 
   render() {
     const { isModalVisible, feelings, voted } = this.state
+    const votedEmotion = feelings.find(f => f.key === voted)
     return (
       <div className="App">
         <Title>
@@ -132,7 +131,13 @@ class App extends React.Component {
           Each person shapes the city, each one has something that makes it
           special. <Link onClick={this.openModal}>Want to learn more?</Link>
         </Paragraph>
+
         <ButtonWrap voted={voted}>
+          <Voted>
+            {voted
+              ? "Thanks for voting! Wait a bit to vote again. 💁‍♀️"
+              : "Choose what you want to share, then see the tower 👀"}
+          </Voted>
           {feelings.map(emotion => {
             const { key } = emotion
             return (
@@ -141,12 +146,14 @@ class App extends React.Component {
                 id={key}
                 active={key === voted}
                 disabled={!!voted}
-                handleSelectEmotion={this.handleSelectEmotion}
+                handleVotes={this.handleVotes}
               />
             )
           })}
         </ButtonWrap>
-        {isModalVisible && <Modal onClose={this.closeModal} />}
+        {isModalVisible && (
+          <Modal color={feelings[0].color} onClose={this.closeModal} />
+        )}
       </div>
     )
   }
