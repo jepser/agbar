@@ -94,6 +94,10 @@ const Modal = ({ color, onClose, feelings }) => {
           voted is the one shown in the tower as a cool projection!
         </p>
         <p>
+          Each time you vote, you will see a stripe with the color of your
+          emotion at the top of the tower. Try it!
+        </p>
+        <p>
           Every 10 minutes we reset the counters and you can vote again, make it
           count and share it with your friends.
         </p>
