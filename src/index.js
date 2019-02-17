@@ -94,12 +94,11 @@ class App extends React.Component {
     const timeLeft = secsLeft
     return (
       <div className="App">
-        <Title>
-          What would you <br /> like to share?
-        </Title>
+        <Title>What feeling would you like to share?</Title>
         <Paragraph>
           Each person shapes the city, each one has something that makes it
-          special. <Link onClick={this.openModal}>Want to learn more?</Link>
+          special. <br /> <b>Let's show it in Glories tower.</b> <br />—{" "}
+          <Link onClick={this.openModal}>Want to learn more?</Link>
         </Paragraph>
 
         <CardWrap voted={voted}>

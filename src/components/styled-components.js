@@ -17,7 +17,7 @@ export const Footer = styled.footer`
 `
 
 export const Paragraph = styled.p`
-  max-width: 320px;
+  max-width: 340px;
   margin-bottom: 32px;
   line-height: 1.5;
 `
