@@ -5,11 +5,15 @@ export const Title = styled.h1`
   font-size: 48px;
 `
 
-export const ButtonWrap = styled.div`
+export const CardWrap = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+`
+
+export const Footer = styled.footer`
+  text-align: center;
 `
 
 export const Paragraph = styled.p`
@@ -22,10 +26,12 @@ export const Link = styled.a`
   text-decoration: underline;
 `
 
-export const Voted = styled.div`
+export const Card = styled.div`
   margin-bottom: 16px;
   padding: 16px;
   border-radius: 8px;
   background-color: white;
-  margin-bottom: 16px;
+  box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.08);
 `
+
+export const Voted = styled(Card)``

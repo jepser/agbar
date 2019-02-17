@@ -6,6 +6,8 @@ const Icon = styled.div`
   pointer-events: none;
   margin-right: 16px;
   padding: 10px;
+  width: 70px;
+  text-align: center;
   transition: transform 1.2s cubic-bezier(0.75, -0.5, 0, 1.75);
 `
 

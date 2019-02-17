@@ -4,63 +4,18 @@ import EmotionCard from "./components/emotion-card"
 import Modal from "./components/modal"
 import {
   Title,
-  ButtonWrap,
+  CardWrap,
   Paragraph,
   Link,
-  Voted
+  Card,
+  Footer
 } from "./components/styled-components"
 import "./styles.css"
-
-const EMOTIONS = {
-  love: {
-    label: "Love",
-    icon: "🥰",
-    color: "#BF395B"
-  },
-  vibes: {
-    label: "Good Vibes",
-    icon: "😎",
-    color: "#62AF00"
-  },
-  peace: {
-    label: "Peace",
-    icon: "✌️",
-    color: "#96CEDC"
-  },
-  energy: {
-    label: "Energy",
-    icon: "⚡️",
-    color: "#FFBA49"
-  }
-}
-
-const ADD_VOTE_EP =
-  "https://us-central1-hackup-light.cloudfunctions.net/addVote"
-const GET_VOTES_EP =
-  "https://us-central1-hackup-light.cloudfunctions.net/getVotes"
-
-const mapVotesToUI = votes => {
-  return votes.map(({ feeling, numberVotes }) => {
-    const feelingMeta = EMOTIONS[feeling]
-    return {
-      key: feeling,
-      votes: numberVotes,
-      icon: feelingMeta.icon,
-      label: feelingMeta.label,
-      color: feelingMeta.color
-    }
-  })
-}
-
-const getVotes = () => {
-  return fetch(GET_VOTES_EP)
-    .then(r => r.json())
-    .then(r => r.orderedRanking)
-    .then(mapVotesToUI)
-}
+import { getVotes, saveVote } from "./lib"
 
 class App extends React.Component {
   state = {
+    secsLeft: 20,
     feelings: [],
     voted: "",
     isModalVisible: false
@@ -96,46 +51,46 @@ class App extends React.Component {
     })
   }
 
-  handleVotes = e => {
+  startCounter = () => {
+    let secsLeft = 30
+    const c = setInterval(() => {
+      --secsLeft
+      if (secsLeft <= 0) {
+        clearInterval(c)
+        return this.setState({
+          voted: ""
+        })
+      }
+
+      this.setState({
+        secsLeft: secsLeft
+      })
+    }, 1000)
+  }
+
+  handleVote = e => {
     e.preventDefault()
 
     if (this.state.voted) return false
 
     const votedEmotion = e.target.value
 
+    this.startCounter()
+
     this.setState(state => ({
       voted: votedEmotion
     }))
 
-    fetch(`${ADD_VOTE_EP}?feeling=${votedEmotion}`)
-      .then(r => r.json())
-      .then(r => r.orderedRanking)
-      .then(mapVotesToUI)
-      .then(feelings => {
-        this.setState({
-          feelings
-        })
-        // this.setState(state => {
-        //   const newFeelings = state.feelings.map(feel => ({
-        //     ...feel,
-        //     votes: votedEmotion === feel.key ? feel.votes + 1 : feel.votes
-        //   }))
-        //   return {
-        //     feelings: newFeelings
-        //   }
-        // })
-      })
-
-    setTimeout(() => {
+    saveVote(votedEmotion).then(feelings => {
       this.setState({
-        voted: ""
+        feelings
       })
-    }, 20000)
+    })
   }
 
   render() {
-    const { isModalVisible, feelings, voted } = this.state
-    const votedEmotion = feelings.find(f => f.key === voted)
+    const { isModalVisible, feelings, voted, secsLeft } = this.state
+    const timeLeft = secsLeft
     return (
       <div className="App">
         <Title>
@@ -146,12 +101,12 @@ class App extends React.Component {
           special. <Link onClick={this.openModal}>Want to learn more?</Link>
         </Paragraph>
 
-        <ButtonWrap voted={voted}>
-          <Voted>
+        <CardWrap voted={voted}>
+          <Card>
             {voted
-              ? "Thanks for voting! Wait a bit to vote again. 💁‍♀️"
+              ? `Thanks for voting! Wait ${timeLeft} seconds to vote again. 💁‍♀️`
               : "Choose what you want to share, then see the tower 👀"}
-          </Voted>
+          </Card>
           {feelings.map(emotion => {
             const { key } = emotion
             return (
@@ -160,15 +115,25 @@ class App extends React.Component {
                 id={key}
                 active={key === voted}
                 disabled={!!voted}
-                handleVotes={this.handleVotes}
+                handleVotes={this.handleVote}
               />
             )
           })}
-        </ButtonWrap>
+        </CardWrap>
         {isModalVisible && (
-          <Modal color={feelings[0].color} onClose={this.closeModal} />
+          <Modal
+            color={feelings[0] ? feelings[0].color : "#f1f1f1"}
+            onClose={this.closeModal}
+            feelings={feelings}
+          />
         )}
-        <p>Made with ☕️, 🍕, 🍺 and 💝 in Barcelona.</p>
+        <Footer>
+          <p>·</p>
+          <p>
+            <a href="">Want to share your own feeling?</a>
+          </p>
+          <p>Made with ☕️, 🍕, 🍺 and 💝 in Barcelona, in 24 hours.</p>
+        </Footer>
       </div>
     )
   }
