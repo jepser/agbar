@@ -134,7 +134,7 @@ class App extends React.Component {
               href="https://feel-glories.typeform.com/to/UlVwlw"
               target="_blank"
             >
-              Want to add your own?
+              Want to add another one?
             </a>
           </p>
           <p>
