@@ -11,6 +11,7 @@ const Root = styled.div`
   padding: 16px;
   background-color: ${props => props.color || "#f1f1"};
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 `
 
 const Container = styled.div`
