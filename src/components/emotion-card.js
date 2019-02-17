@@ -19,6 +19,8 @@ const Button = styled.button`
   box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.08);
   font-family: inherit;
   transition: all 0.2s ease;
+  border: 0;
+  opacity: ${props => (props.disabled && !props.active ? 0.5 : 1)};
   outline: 0;
   ${props =>
     props.disabled

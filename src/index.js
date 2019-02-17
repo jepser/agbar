@@ -26,32 +26,37 @@ const EMOTIONS = {
     label: "Peace",
     icon: "✌️",
     color: "#96CEDC"
+  },
+  energy: {
+    label: "Energy",
+    icon: "⚡️",
+    color: "#FFBA49"
   }
 }
 
-const AGBAR_ENDPOINT =
-  "https://us-central1-hackup-light.cloudfunctions.net/changeTorreGloriasImage"
+const ADD_VOTE_EP =
+  "https://us-central1-hackup-light.cloudfunctions.net/addVote"
+const GET_VOTES_EP =
+  "https://us-central1-hackup-light.cloudfunctions.net/getVotes"
+
+const mapVotesToUI = votes => {
+  return votes.map(({ feeling, numberVotes }) => {
+    const feelingMeta = EMOTIONS[feeling]
+    return {
+      key: feeling,
+      votes: numberVotes,
+      icon: feelingMeta.icon,
+      label: feelingMeta.label,
+      color: feelingMeta.color
+    }
+  })
+}
 
 const getVotes = () => {
-  return (
-    // fetch("https://hackup-light.firebaseio.com/votes.json")
-    Promise.resolve({ love: 100, vibes: 21, peace: 10 })
-      // .then(r => r.json())
-      .then(r => {
-        const sortedArray = Object.entries(r).sort((keyA, keyB) => {
-          return keyB[1] - keyA[1]
-        })
-        return sortedArray.map(([key, value]) => {
-          return {
-            key: key,
-            votes: value,
-            icon: EMOTIONS[key].icon,
-            label: EMOTIONS[key].label,
-            color: EMOTIONS[key].color
-          }
-        })
-      })
-  )
+  return fetch(GET_VOTES_EP)
+    .then(r => r.json())
+    .then(r => r.orderedRanking)
+    .then(mapVotesToUI)
 }
 
 class App extends React.Component {
@@ -98,25 +103,34 @@ class App extends React.Component {
 
     const votedEmotion = e.target.value
 
-    this.setState(state => {
-      const newFeelings = state.feelings.map(feel => ({
-        ...feel,
-        votes: votedEmotion === feel.key ? feel.votes + 1 : feel.votes
-      }))
-      return {
-        voted: votedEmotion,
-        feelings: newFeelings
-      }
-    })
+    this.setState(state => ({
+      voted: votedEmotion
+    }))
+
+    fetch(`${ADD_VOTE_EP}?feeling=${votedEmotion}`)
+      .then(r => r.json())
+      .then(r => r.orderedRanking)
+      .then(mapVotesToUI)
+      .then(feelings => {
+        this.setState({
+          feelings
+        })
+        // this.setState(state => {
+        //   const newFeelings = state.feelings.map(feel => ({
+        //     ...feel,
+        //     votes: votedEmotion === feel.key ? feel.votes + 1 : feel.votes
+        //   }))
+        //   return {
+        //     feelings: newFeelings
+        //   }
+        // })
+      })
 
     setTimeout(() => {
       this.setState({
         voted: ""
       })
     }, 20000)
-    // fetch(`${AGBAR_ENDPOINT}?image=${image}`).then(r => {
-    //   console.log(r)
-    // })
   }
 
   render() {
@@ -154,6 +168,7 @@ class App extends React.Component {
         {isModalVisible && (
           <Modal color={feelings[0].color} onClose={this.closeModal} />
         )}
+        <p>Made with ☕️, 🍕, 🍺 and 💝 in Barcelona.</p>
       </div>
     )
   }

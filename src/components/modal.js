@@ -28,15 +28,43 @@ const Modal = ({ color, onClose }) => {
         <Close onClick={onClose}>Close</Close>
       </CloseWrap>
       <h2>🤔 Why did we do this?</h2>
-      <p>
-        5 people thought that "hacking" the Agbar tower (Olivia, Paola, Pilar,
-        Tiago & Jepser), might be really cool.
-      </p>
+      <p>We...</p>
+      <ul>
+        <li>
+          <a
+            href="https://instagram.com/oliviakristinabengtsson"
+            target="_blank"
+          >
+            Olivia
+          </a>
+        </li>
+        <li>
+          <a href="https://instagram.com/pmquerini" target="_blank">
+            Paola
+          </a>
+        </li>
+        <li>
+          <a href="https://instagram.com/p_mayol" target="_blank">
+            Pilar
+          </a>
+        </li>
+        <li>
+          <a href="https://twitter.com/tpombeiro87" target="_blank">
+            Tiago
+          </a>
+        </li>
+        <li>
+          <a href="https://twitter.com/jepser" target="_blank">
+            Jepser
+          </a>
+        </li>
+      </ul>
+      <p>...thought that "hacking" the Glories tower would be awesome.</p>
       <p>
         We wanted people to share a message with Barcelona, so why not something
         that makes makes them feel part of it.
       </p>
-      <p>That's how we created this...</p>
+      <p>That's why we created this...</p>
       <h2>🤷‍♀️ How does it work?</h2>
       <p>
         You have a list of emotions that you can share with others, the most
