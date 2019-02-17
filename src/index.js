@@ -134,7 +134,16 @@ class App extends React.Component {
               href="https://feel-glories.typeform.com/to/UlVwlw"
               target="_blank"
             >
-              Want to share your own?
+              Want to add your own?
+            </a>
+          </p>
+          <p>
+            Share it in your favourite platform.{" "}
+            <a
+              target="_blank"
+              href="https://www.instagram.com/explore/tags/feelglories/"
+            >
+              #feelglories
             </a>
           </p>
           <p>Made with ☕️, 🍕, 🍺 and 💝 in Barcelona, in 24 hours.</p>
