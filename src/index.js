@@ -131,7 +131,12 @@ class App extends React.Component {
         <Footer>
           <p>·</p>
           <p>
-            <a href="">Want to share your own feeling?</a>
+            <a
+              href="https://feel-glories.typeform.com/to/UlVwlw"
+              target="_blank"
+            >
+              Want to share your own?
+            </a>
           </p>
           <p>Made with ☕️, 🍕, 🍺 and 💝 in Barcelona, in 24 hours.</p>
         </Footer>
