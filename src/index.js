@@ -8,7 +8,8 @@ import {
   Paragraph,
   Link,
   Card,
-  Footer
+  Footer,
+  Message
 } from "./components/styled-components"
 import "./styles.css"
 import { getVotes, saveVote } from "./lib"
@@ -32,9 +33,9 @@ class App extends React.Component {
   componentDidMount() {
     this.updateVotes()
 
-    // setInterval(() => {
-    //   this.updateVotes()
-    // }, 5000)
+    setInterval(() => {
+      this.updateVotes()
+    }, 60000)
   }
 
   closeModal = e => {
@@ -102,11 +103,11 @@ class App extends React.Component {
         </Paragraph>
 
         <CardWrap voted={voted}>
-          <Card>
+          <Message voted={!!voted}>
             {voted
-              ? `Thanks for voting! Wait ${timeLeft} seconds to vote again. 💁‍♀️`
-              : "Choose what you want to share, then see the tower 👀"}
-          </Card>
+              ? `Thanks for voting! You can vote again in ${timeLeft} seconds. 💁‍♀️`
+              : "Choose one and see the tower 👀"}
+          </Message>
           {feelings.map(emotion => {
             const { key } = emotion
             return (

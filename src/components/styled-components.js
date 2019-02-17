@@ -34,4 +34,7 @@ export const Card = styled.div`
   box-shadow: 0 2px 8px 2px rgba(0, 0, 0, 0.08);
 `
 
-export const Voted = styled(Card)``
+export const Message = styled(Card)`
+  color: white;
+  background-color: ${props => (props.voted ? "#111" : "#666")};
+`
